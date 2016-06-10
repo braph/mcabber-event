@@ -1,0 +1,168 @@
+# ================================================
+# nick
+# ================================================
+#
+# This is used for checking if a MUC message was written by you.
+#
+# This option can be specified multiple times.
+#
+nick = braph
+nick = <braph>
+
+
+# ================================================
+# highlight
+# ================================================
+#
+# Keywords for message:muc:highlight.
+#
+# This option can be specified multiple times.
+#
+highlight = braph
+highlight = muskat
+
+
+# ================================================
+# message:in
+# ================================================
+#
+# Called when a normal message is received.
+#
+# Variables:
+#  %user%:     Username of sender
+#  %message%:  Message
+#  %file%:     Mcabber event file
+#
+<message:in>
+   exec = mpv /usr/share/sounds/freedesktop/stereo/message.oga
+   exec = notify-send -i main-unread "%user%" "%message%"
+</message:in>
+
+
+# ================================================
+# message:out
+# ================================================
+#
+# Called when a normal message is sent.
+#
+# Variables:
+#  %user%:     Username of receiver
+#
+<message:out>
+</message:out>
+
+
+# ================================================
+# message:muc:*
+# ================================================
+#
+# The sub-events of message:muc have theese variables in common:
+#
+#  %user%:     Username of sender
+#  %room%:     Room name of MUC
+#  %server%:   Server of MUC
+#  %file%:     Mcabber event file
+#  %message%:  Incoming message
+
+
+# ================================================
+# message:muc:in
+# ================================================
+#
+# Called on incoming MUC messages.
+#
+# If the message contains an keyword specified in highlight,
+# message:muc:highlight will be called instead.
+#
+<message:muc:in>
+   exec = notify-send -i main-unread "%room%@%server%" "%user%: %message%"
+</message:muc:in>
+
+
+# ================================================
+# message:muc:highlight 
+# ================================================
+#
+# Called on incoming MUC messages containing any names given in
+# parameter 'nick'.
+#
+<message:muc:highlight>
+   exec = mpv /usr/share/sounds/freedesktop/stereo/suspend-error.oga
+   exec = notify-send -u critical -i main-unread "%room%@%server%" "%user%: %message%"
+</message:muc:highlight>
+
+
+# ================================================
+# message:muc:out 
+# ================================================
+#
+# Called on outgoing MUC messages.
+# An outgoing message matches %user% on a name given in parameter 'nick'.
+#
+<message:muc:out>
+</message:muc:out>
+
+
+# ================================================
+# status:*
+# ================================================
+#
+# Sub-events of status have these variables in common:
+#  %user%:     Username of buddy
+#
+<status:online>
+   exec = notify-send "%user% [Online]"
+   exec = mpv /usr/share/sounds/freedesktop/stereo/service-login.oga
+</status:oneline>
+
+<status:free>
+   exec = notify-send "%user% [Free]"
+</status:free>
+
+<status:away>
+   exec = notify-send "%user% [Away]"
+</status:away>
+
+<status:not_available>
+   exec = notify-send "%user% [N/A]"
+</status:not_available>
+
+<status:do_not_disturb>
+   exec = notify-send "%user% [DND]"
+</status:do_not_disturb>
+
+<status:offline>
+   exec = notify-send "%user% [Offline]"
+   exec = mpv /usr/share/sounds/freedesktop/stereo/service-logout.oga
+</status:offline>
+
+
+# ================================================
+# unread 
+# ================================================
+#
+# Called when the number of unread buffers change.
+#
+# Variables:
+#  %unread_buffers%:                      Number of unread buffers
+#  %unread_buffers_attention_sign%:       Number of unread buffers with attention sign (!)
+#  %unread_muc_buffers%:                  Number of unread MUC buffers
+#  %unread_muc_buffers_attention_sign%:   Number of unread MUC buffers with attention sign (!)
+#
+<unread>
+   ### exec = notify-send -i main-unread "Unread messages: %unread_buffers%/%unread_muc_buffers%"
+</unread>
+
+
+# ================================================
+# url
+# ================================================
+#
+# Called on any URL found in incoming messages.
+#
+# Variables:
+#  %url%:      Matched url
+#
+<url>
+   exec = chromium "%url%"
+</url>

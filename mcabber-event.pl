@@ -125,7 +125,7 @@ $EVENTS{STATUS} = sub
       N => 'not_available'
    }->{$status};
 
-   call_rule("$status:$long_status", {user=>$user});
+   call_rule("status:$long_status", {user=>$user});
 };
 
 # Called when number of unread messages changes
